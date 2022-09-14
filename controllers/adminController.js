@@ -1,24 +1,12 @@
 const Farmer = require('../models/farmer')
-const Joi = require('joi');
 const farmerJoischema = require('../joi_models/farmers_joi')
 const passport = require('passport');
 const multer = require('multer');
-const {singleUpload,singleAllMediaUpload,singleAudioUpload} = require('../middlewares/filesMiddleware');
+const {singleUpload} = require('../middlewares/filesMiddleware');
 const { v4: uuidv4 }  = require('uuid');
 const jwt =require('jsonwebtoken');
-const math = require('../middlewares/math.middleware')
-const randomstring = require("randomstring");
-const cloudinary = require('cloudinary');
 
 const cloudinaryUplouder = require('./uploadCloudinary');
-const { findOne } = require('../models/farmer');
-
-// cloudinary configuration for saving files
-// cloudinary.config({
-//     cloud_name: 'mustyz',
-//     api_key: '727865786596545',
-//     api_secret: 'HpUmMxoW8BkmIRDWq_g2-5J2mD8'
-// })
 
 
 // staff registration controller
