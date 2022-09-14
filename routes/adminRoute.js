@@ -24,6 +24,9 @@ router.put('/upload-product-image', adminController.setProductImage)
 // edit farmer
 router.put('/edit-farmer', adminController.editFarmer)
 
+// edit product
+router.put('/edit-product', adminController.editProduct)
+
 
 // login user
 router.post('/login', adminController.loginFarmer)
@@ -47,8 +50,11 @@ router.get('/get-all-product', adminController.getAllProduct)
 // remove single product
 router.put('/remove-single-product', adminController.deleteProduct)
 
-// // remove department program
-// router.delete('/remove-company', adminController.removeCompany)
+// remove all farmers product
+router.put('/remove-all-farmers-product', adminController.deleteAllFarmersProduct)
+
+// delete farmers account 
+router.delete('/delete-farmers-account', adminController.deleteFarmersAccount)
 
 
 module.exports = router;

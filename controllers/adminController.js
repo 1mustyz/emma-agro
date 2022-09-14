@@ -321,43 +321,69 @@ exports.deleteProduct = async (req,res, next) => {
   }
 }
 
-// exports.removeCompany = async (req,res,next) => {
-//   const {companyId} = req.query;
-//   let result
-//   try {
+// delete all farmers product
 
-//     const resultImage = await Farmer.findOne({"username":companyId})
-//     const deleteAllEmergencies = async () => {
-//       resultImage.emergencies.map(async (emg)=>{
-//         // console.log(emg)
-  
-//         if (emg.image != undefined) await cloudinaryUplouder.delete(emg.image)
-//         if (emg.audio != undefined) await cloudinaryUplouder.delete(emg.audio)
-//         if (emg.video != undefined) await cloudinaryUplouder.delete(emg.video)
-  
-        
-//       })    
-//       if (resultImage.image != null) await cloudinaryUplouder.delete(resultImage.image)
-//     }
+exports.deleteAllFarmersProduct = async (req,res, next) => {
+  const {username} = req.query
+  try {
+    const farm = await Farmer.findOne({username:username})
     
-//     const myPromise = new Promise(async (resolve, reject) => {
-//       resolve(deleteAllEmergencies())
-//     });
+    const cDelete = async ()=>{
+      farm.product.map(async (prd) => {
+        if(prd.image != null && prd.image != undefined)  await cloudinaryUplouder.delete(prd.image)
 
-//     myPromise.then(async ()=>{
+      })
+    }
+    const myPromise = new Promise(async (resolve, reject) => {
+      resolve(cDelete())
+    });
 
-//       await Farmer.findOneAndDelete({"username": companyId})
-//       result = await Farmer.find({},{_id:0,emergencies:0})
-//       res.json({success: true, message: `Farmer with the ID ${companyId} has been removed`, result})
-//     })
-   
+    myPromise.then( async ()=>{
+      await Farmer.findOneAndUpdate({"username":username},{$set:{"product":[]}},{new:true})
+      const result = await Farmer.findOne({username:username})
+      res.json({success: true, message: result})
+    })
     
-
-//   } catch (error) {
-//     console.log(error)
+  } catch (error) {
+    console.log(error)
     
-//   }
-// }
+  }
+}
+
+
+
+// delete farmers account
+
+exports.deleteFarmersAccount = async (req,res, next) => {
+  const {username} = req.query
+  try {
+    const farm = await Farmer.findOne({username:username})
+    
+    const cDelete = async ()=>{
+
+      // delete farmers image
+      await cloudinaryUplouder.delete(farm.image)
+
+      // delete all product image
+      farm.product.map(async (prd) => {
+        if(prd.image != null && prd.image != undefined)  await cloudinaryUplouder.delete(prd.image)
+
+      })
+    }
+    const myPromise = new Promise(async (resolve, reject) => {
+      resolve(cDelete())
+    });
+
+    myPromise.then( async ()=>{
+      await Farmer.deleteOne({"username":username})
+      res.json({success: true, message: "account deleted successfully"})
+    })
+    
+  } catch (error) {
+    console.log(error)
+    
+  }
+}
 
 
 
@@ -407,6 +433,29 @@ exports.setProductImage = async (req,res, next) => {
         res.json({success: true,message: editedStaff,});
     }
   });
+    
+     
+}
+
+// edit product 
+exports.editProduct = async (req,res, next) => {
+  const {productId} = req.query
+  const data = req.body
+                    
+    await Farmer.findOneAndUpdate({"product.productId": productId},{$set:{
+      "product.$[e1].productName": data.productName,
+      "product.$[e1].category": data.category,
+      "product.$[e1].price": data.price,
+      "product.$[e1].quantity": data.quantity,
+    }},
+    { 
+      arrayFilters: [
+        {"e1.productId": productId},
+        ],
+    })
+    const editedStaff = await Farmer.findOne({"product.productId": productId})
+    
+    res.json({success: true,message: editedStaff,});
     
      
 }
