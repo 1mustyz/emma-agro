@@ -44,8 +44,8 @@ router.get('/get-single-farmer', adminController.singleFarmer)
 // get all product
 router.get('/get-all-product', adminController.getAllProduct)
 
-// // get single emergency
-// router.get('/get-single-emergency', adminController.getSingleEmergency)
+// get product by searching
+router.get('/get-product-by-searching', adminController.getProductBySearching)
 
 // remove single product
 router.put('/remove-single-product', adminController.deleteProduct)

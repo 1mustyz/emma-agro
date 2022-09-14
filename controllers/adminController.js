@@ -265,7 +265,14 @@ exports.getAllProduct = async (req,res, next) => {
       {$project: {hash:0,salt:0}},
       {$unwind: "$product"}
     ]);
-    res.json({success: true, message: result,})
+
+    const categries = await Farmer.aggregate([
+      {$match: {}},
+      {$project: {hash:0,salt:0}},
+      {$unwind: "$product"},
+      {$group: {_id: "$product.category", count: {$sum: 1}}}
+    ]);
+    res.json({success: true, result, categries,})
     
   } catch (error) {
     console.log(error)
@@ -273,20 +280,28 @@ exports.getAllProduct = async (req,res, next) => {
   }
 }
 
-// // get single emergency
-// exports.getSingleEmergency = async (req,res, next) => {
-//   const {productId} = req.query
-//   try {
-//     const result = await Farmer.findOne({"emergencies.productId":productId},{emergencies:1});
-//     console.log(result)
-//     const singleProduct = result.emergencies.filter(emgy => emgy.productId == productId)
-//     res.json({success: true, message: singleProduct,})
+
+// get product by searching
+exports.getProductBySearching = async (req,res, next) => {
+  const {search} = req.query
+  try {
+    const result = await Farmer.aggregate([
+      {$match: {}},
+      {$project: {hash:0,salt:0}},
+      {$unwind: "$product"},
+      {$match: {$or: [{"product.productName": new RegExp(search,'i')},{"product.category": new RegExp(search,'i')}]}},
+
+    ]);
+
+   
+    res.json({success: true, result})
     
-//   } catch (error) {
-//     console.log(error)
+  } catch (error) {
+    console.log(error)
     
-//   }
-// }
+  }
+}
+
 
 // delete product
 
