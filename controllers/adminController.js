@@ -239,7 +239,7 @@ exports.createProduct = async (req,res, next) => {
   try {
     await Farmer.findOneAndUpdate({"username":username},{$push:{"product":data}},{new:true})
     const result = await Farmer.findOne({"username":username})
-    res.json({success:true, message:"product added",result})
+    res.json({success:true, message:"product added",result, newProductId: data.productId})
   } catch (error) {
     console.log(error)
   }
