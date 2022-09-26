@@ -129,6 +129,7 @@ exports.loginFarmer = (req, res, next) => {
           username: user.username,
           firstName: user.firstName,
           lastName: user.lastName,
+          image: user.image,
           phone: user.phone,
           address: user.address,
           createdAt: user.createdAt,
