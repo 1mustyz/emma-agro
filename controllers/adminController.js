@@ -401,7 +401,7 @@ exports.setProductImage = async (req,res, next) => {
       return res.json(err);
     }
     else if (!req.file) {
-      return res.json({"image": req.file, "msg":'Please select an image to upload'});
+      return res.json({success: false, "image": req.file, "msg":'Please select an image to upload'});
     }
     if(req.file){
 
