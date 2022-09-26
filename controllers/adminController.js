@@ -131,6 +131,7 @@ exports.loginFarmer = (req, res, next) => {
           lastName: user.lastName,
           image: user.image,
           phone: user.phone,
+          product: user.product,
           address: user.address,
           createdAt: user.createdAt,
           updatedAt: user.updatedAt,
