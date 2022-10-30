@@ -13,6 +13,15 @@ const farmerJoischema = Joi.object({
     lastName: Joi.string()
         .required(),
 
+    country: Joi.string()
+    .required(),
+
+    state: Joi.string()
+        .required(),
+
+    city: Joi.string()
+    .required(),    
+
     phone: Joi.string()
         .required(),
         
