@@ -8,6 +8,9 @@ const FarmerSchema = new Schema({
     lastName: { type: String, required: true},
     phone: { type: String, required: true},
     address: { type: String},
+    country: {type: String, default: null},
+    state: {type: String, default: null},
+    city: {type: String, default: null},
     image: { type: String, default: 'null' },
     product:[{type: Object, default:Array}]
 }, { timestamps: true });

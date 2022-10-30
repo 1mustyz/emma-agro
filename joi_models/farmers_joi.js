@@ -1,4 +1,7 @@
 const Joi = require('joi');
+const { joiPasswordExtendCore } = require('joi-password');
+const joiPassword = Joi.extend(joiPasswordExtendCore);
+
 const farmerJoischema = Joi.object({
     username: Joi.string()
         .email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } })
@@ -13,8 +16,13 @@ const farmerJoischema = Joi.object({
     phone: Joi.string()
         .required(),
         
-    password: Joi.string()
-        .pattern(new RegExp('^[a-zA-Z0-9]{3,30}$')),
+    password: joiPassword.string()
+    .minOfSpecialCharacters(1)
+    .minOfLowercase(1)
+    .minOfUppercase(1)
+    .minOfNumeric(1)
+    .noWhiteSpaces()
+    .required(),
 
    
     address: Joi.string()
